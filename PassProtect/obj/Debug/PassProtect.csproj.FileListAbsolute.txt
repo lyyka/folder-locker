@@ -1,0 +1,45 @@
+C:\Users\Luka\Desktop\PassProtect\PassProtect\bin\Debug\PassProtect.exe.config
+C:\Users\Luka\Desktop\PassProtect\PassProtect\bin\Debug\PassProtect.exe
+C:\Users\Luka\Desktop\PassProtect\PassProtect\bin\Debug\PassProtect.pdb
+C:\Users\Luka\Desktop\PassProtect\PassProtect\obj\Debug\PassProtect.csprojResolveAssemblyReference.cache
+C:\Users\Luka\Desktop\PassProtect\PassProtect\obj\Debug\PassProtect.exe
+C:\Users\Luka\Desktop\PassProtect\PassProtect\obj\Debug\PassProtect.pdb
+C:\Users\Luka\Desktop\PassProtect\PassProtect\bin\Debug\PassProtect.exe.manifest
+C:\Users\Luka\Desktop\PassProtect\PassProtect\bin\Debug\PassProtect.application
+C:\Users\Luka\Desktop\PassProtect\PassProtect\obj\Debug\PassProtect.exe.manifest
+C:\Users\Luka\Desktop\PassProtect\PassProtect\obj\Debug\PassProtect.application
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\bin\Debug\PassProtect.exe.config
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\obj\Debug\PassProtect.exe
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\obj\Debug\PassProtect.pdb
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\bin\Debug\PassProtect.exe
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\bin\Debug\PassProtect.pdb
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\obj\Debug\PassProtect.csprojResolveAssemblyReference.cache
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\bin\Debug\PassProtect.exe.manifest
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\bin\Debug\PassProtect.application
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\obj\Debug\PassProtect.TrustInfo.xml
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\obj\Debug\PassProtect.exe.manifest
+C:\Users\Luka\Desktop\C#\Skola vezbe\PassProtect\PassProtect\obj\Debug\PassProtect.application
+D:\Programiranje\Programi\PassProtect\PassProtect\bin\Debug\PassProtect.exe.config
+D:\Programiranje\Programi\PassProtect\PassProtect\bin\Debug\PassProtect.exe.manifest
+D:\Programiranje\Programi\PassProtect\PassProtect\bin\Debug\PassProtect.application
+D:\Programiranje\Programi\PassProtect\PassProtect\bin\Debug\PassProtect.exe
+D:\Programiranje\Programi\PassProtect\PassProtect\bin\Debug\PassProtect.pdb
+D:\Programiranje\Programi\PassProtect\PassProtect\obj\Debug\PassProtect.csprojResolveAssemblyReference.cache
+D:\Programiranje\Programi\PassProtect\PassProtect\obj\Debug\PassProtect.csproj.CoreCompileInputs.cache
+D:\Programiranje\Programi\PassProtect\PassProtect\obj\Debug\PassProtect.TrustInfo.xml
+D:\Programiranje\Programi\PassProtect\PassProtect\obj\Debug\PassProtect.exe.manifest
+D:\Programiranje\Programi\PassProtect\PassProtect\obj\Debug\PassProtect.application
+D:\Programiranje\Programi\PassProtect\PassProtect\obj\Debug\PassProtect.exe
+D:\Programiranje\Programi\PassProtect\PassProtect\obj\Debug\PassProtect.pdb
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\bin\Debug\PassProtect.exe.config
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\bin\Debug\PassProtect.exe.manifest
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\bin\Debug\PassProtect.application
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\bin\Debug\PassProtect.exe
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\bin\Debug\PassProtect.pdb
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.csprojResolveAssemblyReference.cache
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.csproj.CoreCompileInputs.cache
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.TrustInfo.xml
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.exe.manifest
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.application
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.exe
+C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.pdb
