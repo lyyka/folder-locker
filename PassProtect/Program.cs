@@ -91,7 +91,7 @@ namespace PassProtect
             }
             catch
             {
-                Console.WriteLine("Something went wrong (maybe the partition you entered deos not exist)! :(");
+                Console.WriteLine("Something went wrong (maybe the partition you entered does not exist)! :(");
                 Console.ReadKey();
                 goto Start_Locking;
             }
@@ -114,11 +114,11 @@ namespace PassProtect
                     folder_names.Add(file.Name);
                 }
 
-                string set_password = "gudlak123";
+                string set_password = "goodluck123";
 
             IfPasswordIsWrong: //2
                 Console.WriteLine("");
-                Console.WriteLine("Input password:");
+                Console.Write("Input password: ");
                 string input_password = Convert.ToString(Console.ReadLine()); // password input
                 if (input_password == set_password) // if password is correct
                 {
@@ -138,12 +138,9 @@ namespace PassProtect
                     }
                     Console.WriteLine("Input the number of folder you wish to open (-1 if you don't wish to open any)");
                     int rednibroj = Convert.ToInt32(Console.ReadLine());
-                    if (rednibroj <= folder_names.Count() - 1 && rednibroj >= -1) // ako je redni broj validan, folder se otvara
-                    {
-                        if(rednibroj >= 0)
-                        {                 
-                            Process.Start("explorer.exe", "E:\\" + folder_names[rednibroj]);
-                        }
+                    if (rednibroj <= folder_names.Count() - 1 && rednibroj >= 0) // ako je redni broj validan, folder se otvara
+                    {               
+                        Process.Start("explorer.exe", "E:\\" + folder_names[rednibroj]);
                         ProgramStart();
                     }
                     else // if folder number is not between -1 and max folder number
