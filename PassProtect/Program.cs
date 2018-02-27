@@ -17,7 +17,7 @@ namespace PassProtect
         static void ProgramStart()
         {
             Start_Menu:
-            string[] exceptions = { "RECYCLER" , "System Volume Information" , "$RECYCLE.BIN" , "$AVG" , "Config.msi"};
+            string[] exceptions = { "RECYCLER" , "System Volume Information" , "$RECYCLE.BIN" , "$AVG" , "Config.msi" , "Windows" , "OneDriveTemp", "ProgramData" , "$WINRE_BACKUP_PARTITION.MARKER" };
             Console.Clear();
             Console.WriteLine("Welcome to the folder lock tool!");
             Console.WriteLine("");
