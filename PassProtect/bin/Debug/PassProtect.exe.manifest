@@ -41,14 +41,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PassProtect.exe" size="7680">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="PassProtect.exe" size="8192">
       <assemblyIdentity name="PassProtect" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>WyEpKe5DRKvRZtHHjsxPAHvASrs=</dsig:DigestValue>
+        <dsig:DigestValue>EN09sfA1+hqVChMM+L2CMIbousA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

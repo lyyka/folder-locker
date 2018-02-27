@@ -16,7 +16,8 @@ namespace PassProtect
         }
         static void ProgramStart()
         {
-        Start_Menu:
+            Start_Menu:
+            string[] exceptions = { "RECYCLER" , "System Volume Information" , "$RECYCLE.BIN" , "$AVG" , "Config.msi"};
             Console.Clear();
             Console.WriteLine("Welcome to the folder lock tool!");
             Console.WriteLine("");
@@ -29,11 +30,11 @@ namespace PassProtect
                 int unos = Convert.ToInt32(Console.ReadLine());
                 if (unos == 1)
                 {
-                    Locking();
+                    Locking(exceptions);
                 }
                 if (unos == 2)
                 {
-                    Unlocking();
+                    Unlocking(exceptions);
                 }
                 if (unos == 3)
                 {
@@ -50,7 +51,7 @@ namespace PassProtect
             }
 
         }
-        static void Locking()
+        static void Locking(string[] exceptions)
         {
         Start_Locking:
             try
@@ -77,7 +78,7 @@ namespace PassProtect
                     // locks all folders
                     foreach(string folder_name in folder_names)
                     {
-                        if (folder_name.Trim() != "")
+                        if (CheckName(folder_name,exceptions))
                         {
                             DirectoryInfo d1 = new DirectoryInfo(partition_letter + ":\\" + folder_name);
                             d1.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
@@ -97,7 +98,7 @@ namespace PassProtect
             }
         }
 
-        static void Unlocking()
+        static void Unlocking(string[] exceptions)
         {
         Start_Unlocking:
             try
@@ -111,7 +112,10 @@ namespace PassProtect
                 DirectoryInfo[] Files = d.GetDirectories();
                 foreach (DirectoryInfo file in Files)
                 {
-                    folder_names.Add(file.Name);
+                    if(CheckName(file.Name,exceptions))
+                    {
+                        folder_names.Add(file.Name);
+                    }
                 }
 
                 string set_password = "goodluck123";
@@ -132,7 +136,7 @@ namespace PassProtect
                     }
                     IfFolderNumberWrong: //1
                     Console.WriteLine("");
-                    if(Unlock_All(folder_names, partition_letter))
+                    if(Unlock_All(folder_names, partition_letter,exceptions))
                     {
                         Console.WriteLine("Folders successfully unlocked!");
                     }
@@ -140,10 +144,14 @@ namespace PassProtect
                     int rednibroj = Convert.ToInt32(Console.ReadLine());
                     if (rednibroj <= folder_names.Count() - 1 && rednibroj >= 0) // ako je redni broj validan, folder se otvara
                     {               
-                        Process.Start("explorer.exe", "E:\\" + folder_names[rednibroj]);
+                        Process.Start("explorer.exe", partition_letter + ":\\" + folder_names[rednibroj]);
                         ProgramStart();
                     }
-                    else // if folder number is not between -1 and max folder number
+                    else if(rednibroj == -1)
+                    {
+                        ProgramStart();
+                    }
+                    else if(rednibroj < -1 || rednibroj >= folder_names.Count()) // if folder number is not between -1 and max folder number
                     {
                         Console.WriteLine("That folder number does not exist");
                         goto IfFolderNumberWrong;
@@ -162,13 +170,13 @@ namespace PassProtect
                 goto Start_Unlocking;
             }
         }
-        static bool Unlock_All(List<string> folder_names, string slovo)
+        static bool Unlock_All(List<string> folder_names, string slovo, string[] exceptions)
         {
             try
             {
                 foreach (string folder_name in folder_names)
                 {
-                    if (folder_name.Trim() != "" && folder_name != "System volume information" && folder_name != "RECYCLER")
+                    if (CheckName(folder_name,exceptions))
                     {
                         DirectoryInfo d1 = new DirectoryInfo(slovo + ":\\" + folder_name);
                         d1.Attributes = FileAttributes.Directory | FileAttributes.Normal;
@@ -180,6 +188,21 @@ namespace PassProtect
             {
                 return false;
             }
+        }
+        static bool CheckName(string folder_name,string[] exceptions)
+        {
+            if(folder_name.Trim() == "")
+            {
+                return false;
+            }
+            foreach(string exception in exceptions)
+            {
+                if(folder_name.ToLower() == exception.ToLower())
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
