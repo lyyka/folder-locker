@@ -43,3 +43,15 @@ C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.ex
 C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.application
 C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.exe
 C:\Users\Luka\Documents\GitHub\FolderLocker\PassProtect\obj\Debug\PassProtect.pdb
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\bin\Debug\PassProtect.exe.config
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\bin\Debug\PassProtect.exe.manifest
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\bin\Debug\PassProtect.application
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\bin\Debug\PassProtect.exe
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\bin\Debug\PassProtect.pdb
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\obj\Debug\PassProtect.csprojAssemblyReference.cache
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\obj\Debug\PassProtect.csproj.CoreCompileInputs.cache
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\obj\Debug\PassProtect.TrustInfo.xml
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\obj\Debug\PassProtect.exe.manifest
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\obj\Debug\PassProtect.application
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\obj\Debug\PassProtect.exe
+C:\Users\Asus\Documents\git\FolderLocker\PassProtect\obj\Debug\PassProtect.pdb
