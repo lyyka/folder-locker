@@ -16,7 +16,7 @@ namespace PassProtect
         }
         static void ProgramStart()
         {
-            ProgramStart();
+            //ProgramStart();
             string[] exceptions = { "RECYCLER" , "System Volume Information" , "$RECYCLE.BIN" , "$AVG" , "Config.msi" , "Windows" , "OneDriveTemp", "ProgramData" , "$WINRE_BACKUP_PARTITION.MARKER" };
             Console.Clear();
             Console.WriteLine("Welcome to the folder locker tool!");
