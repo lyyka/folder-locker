@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
 using Microsoft.Win32;
 using System.Security.Cryptography;
-using System.Threading;
 
 namespace PassProtect
 {
@@ -16,6 +12,11 @@ namespace PassProtect
         static void Main(string[] args)
         {
             ProgramStart();
+        }
+
+        public static string GetTimestamp(DateTime value)
+        {
+            return value.ToString("yyyyMMddHHmmssffff");
         }
 
         static string HashPassword(string password)
@@ -52,25 +53,64 @@ namespace PassProtect
             return valid;
         }
 
+        static string InputPassword()
+        {
+            string password = "";
+            do
+            {
+                ConsoleKeyInfo cons_key = Console.ReadKey(true);
+                // Backspace Should Not Work
+                if (cons_key.Key != ConsoleKey.Backspace && cons_key.Key != ConsoleKey.Enter)
+                {
+                    password += cons_key.KeyChar;
+                    Console.Write("*");
+                }
+                else
+                {
+                    if (cons_key.Key == ConsoleKey.Backspace && password.Length > 0)
+                    {
+                        password = password.Substring(0, (password.Length - 1));
+                        Console.Write("\b \b");
+                    }
+                    else if (cons_key.Key == ConsoleKey.Enter)
+                    {
+                        break;
+                    }
+                }
+            } while (true);
+
+            return password;
+        }
+
         static void ShowPasswordCreation(RegistryKey key)
         {
             Console.WriteLine("Please create a unique password for use to lock folders: ");
-            string password = Console.ReadLine();
+
+            string password = InputPassword();
+
+            // hash the password
             string hashed = HashPassword(password);
+
+            // save password hash
             key.SetValue("password", hashed);
+
+            // set current date and time
+            key.SetValue("last_updated", DateTime.Now);
+
             Console.Clear();
         }
 
         static void ProgramStart()
         {
-            //ProgramStart();
             string[] exceptions = { "RECYCLER" , "System Volume Information" , "$RECYCLE.BIN" , "$AVG" , "Config.msi" , "Windows" , "OneDriveTemp", "ProgramData" , "$WINRE_BACKUP_PARTITION.MARKER" };
-            Console.Clear();
-            Console.WriteLine("Welcome to the folder locker tool!");
-
             bool password_set = false;
             RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\FolderLocker", true);
-            if(key == null)
+
+            Console.Clear();
+            Console.WriteLine("Welcome to the folder locker tool!");
+            // key.DeleteValue("password"); // used for testing purposes only
+
+            if (key == null)
             {
                 key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\FolderLocker");
                 ShowPasswordCreation(key);
@@ -82,29 +122,34 @@ namespace PassProtect
                 {
                     ShowPasswordCreation(key);
                 }
+                else
+                {
+                    Console.WriteLine("Password last updated: {0}", key.GetValue("last_updated"));
+                }
             }
 
             Console.WriteLine("--Enter the number to start--");
             Console.WriteLine("1 -> Lock folders");
             Console.WriteLine("2 -> Unlock folders");
             Console.WriteLine("3 -> Close this");
-            Console.WriteLine("");
+            Console.WriteLine();
+
             try
             {
-                int unos = Convert.ToInt32(Console.ReadLine());
-                if (unos == 1)
+                int command = Convert.ToInt32(Console.ReadLine());
+                if (command == 1)
                 {
                     Locking(exceptions, key);
                 }
-                if (unos == 2)
+                if (command == 2)
                 {
                     Unlocking(exceptions, key);
                 }
-                if (unos == 3)
+                if (command == 3)
                 {
                     Environment.Exit(0);
                 }
-                if (unos < 1 || unos > 3)
+                if (command < 1 || command > 3)
                 {
                     ProgramStart();
                 }
@@ -113,7 +158,6 @@ namespace PassProtect
             {
                 ProgramStart();
             }
-
         }
         static void Locking(string[] exceptions, RegistryKey key)
         {
@@ -122,24 +166,26 @@ namespace PassProtect
                 // clear start menu
                 Console.Clear();
                 ShowAvailableDrives();
-                Timer t = new Timer(TimerShowDrives, null, 0, 2000);
+
                 // enter the partition letter
-                Console.WriteLine("Please, enter the drive letter you wish to lock");
-                string partition_letter = Convert.ToString(Console.ReadLine());
-                // list that will contain all folder names
-                //List<string> folder_names = new List<string>();
+                Console.Write("Please, enter the drive letter you wish to lock: ");
+                string partition_letter = Console.ReadLine();
+
                 // get all files from partition
                 DirectoryInfo d = new DirectoryInfo(partition_letter + ":\\");
                 DirectoryInfo[] folders_on_drive = d.GetDirectories();
-                if (folders_on_drive.Length == 0)
+                FileInfo[] files_on_drive = d.GetFiles();
+
+                if (folders_on_drive.Length == 0 && files_on_drive.Length == 0)
                 {
-                    Console.WriteLine("No folders found on drive " + partition_letter + ":\\");
-                    Console.WriteLine("Press any key to continue...");
+                    Console.WriteLine("Drive " + partition_letter + ":\\ is empty");
+                    Console.WriteLine("Press any key to continue . . .");
                     Console.ReadKey();
                     Locking(exceptions, key);
                 }
                 else
                 {
+                    // hide all folders
                     foreach (DirectoryInfo folder in folders_on_drive)
                     {
                         // before, it was adding files to the list here, and locking them in next commented foreach
@@ -149,17 +195,24 @@ namespace PassProtect
                             d1.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                         }
                     }
-                    Console.WriteLine("");
+
+                    // hide all files
+                    foreach (FileInfo file in files_on_drive)
+                    {
+                        file.Attributes = FileAttributes.Hidden;
+                    }
+
+                    Console.WriteLine();
                     Console.WriteLine("All folders are successfully locked!");
-                    Console.WriteLine("Press any key to continue...");
+                    Console.WriteLine("Press any key to continue . . .");
                     Console.ReadKey();
                     ProgramStart();
                 }
             }
             catch
             {
-                Console.WriteLine("Something went wrong (maybe the drive you entered does not exist)! :(");
-                Console.WriteLine("Press any key to continue...");
+                Console.WriteLine("Something went wrong (maybe the drive you entered does not exist)!");
+                Console.WriteLine("Press any key to continue . . .");
                 Console.ReadKey();
                 Locking(exceptions, key);
             }
@@ -172,85 +225,26 @@ namespace PassProtect
                 // clear start menu
                 Console.Clear();
                 ShowAvailableDrives();
+
                 // enter the partition letter
-                Console.WriteLine("Please, enter the drive letter you wish to unlock");
-                string partition_letter = Convert.ToString(Console.ReadLine());
+                Console.Write("Please, enter the drive letter you wish to unlock: ");
+                string partition_letter = Console.ReadLine();
+
                 // folder getters
                 DirectoryInfo d = new DirectoryInfo(partition_letter + ":\\");
-                DirectoryInfo[] Folders = d.GetDirectories();
-                if(Folders.Length == 0)
+                DirectoryInfo[] folders = d.GetDirectories();
+                FileInfo[] files = d.GetFiles();
+
+                if (folders.Length == 0 && files.Length == 0)
                 {
-                    Console.WriteLine("No folders found on drive " + partition_letter + ":\\");
+                    Console.WriteLine("Drive " + partition_letter + ":\\ is empty");
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
                     Unlocking(exceptions, key);
                 }
                 else
                 {
-                    // the list that holds folder names
-                    List<string> folder_names = new List<string>();
-                    // get folder names
-                    foreach (DirectoryInfo folder in Folders)
-                    {
-                        if (CheckName(folder.Name, exceptions))
-                        {
-                            folder_names.Add(folder.Name);
-                        }
-                    }
-
-                    IfPasswordIsWrong: //2
-                    Console.WriteLine("");
-                    Console.Write("Enter the password: ");
-                    string input_password = Convert.ToString(Console.ReadLine()); // password input
-                    if (ComparePassword(key.GetValue("password").ToString(), input_password)) // if password is correct
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine("Folders:"); // shows all folders on the drive
-                        // print out all folders with their index numbers
-                        int index = 0;
-                        foreach (string folder_name in folder_names)
-                        {
-                            Console.WriteLine(index + "." + "" + folder_name);
-                            index++;
-                        }
-                        Console.WriteLine("");
-                        // unlock all
-                        if (Unlock_All(folder_names, partition_letter, exceptions))
-                        {
-                            Console.WriteLine("Folders successfully unlocked!");
-                        }
-                        else
-                        {
-                            Console.WriteLine("There was a problem unlocking all folders on a selected drive!");
-                        }
-                        IfFolderNumberWrong: //1
-                        // user enters the folder index he wishes to open
-                        Console.WriteLine("Input the number of a folder you wish to open (just hit ENTER if you wish to open none)");
-                        string user_input = Console.ReadLine();
-                        if(user_input.Trim() != "")
-                        {
-                            int folder_number_to_open = Convert.ToInt32(user_input);
-                            if (folder_number_to_open <= folder_names.Count() - 1 && folder_number_to_open >= 0) // if folder number is valid, folder opens
-                            {
-                                Process.Start("explorer.exe", partition_letter + ":\\" + folder_names[folder_number_to_open]);
-                                ProgramStart();
-                            }
-                            else if (folder_number_to_open < 0 || folder_number_to_open >= folder_names.Count()) // if folder number is not between 0 and max folder number
-                            {
-                                Console.WriteLine("That folder number does not exist");
-                                goto IfFolderNumberWrong;
-                            }
-                        }
-                        else
-                        {
-                            ProgramStart();
-                        }
-                    }
-                    else // if password is incorrect
-                    {
-                        Console.WriteLine("Wrong password");
-                        goto IfPasswordIsWrong;
-                    }
+                    PasswordVerifyAndUnlock(exceptions, partition_letter, folders, files, key);
                 }
             }
             catch
@@ -261,6 +255,46 @@ namespace PassProtect
                 Unlocking(exceptions, key);
             }
         }
+
+        static void PasswordVerifyAndUnlock(string[] exceptions, string partition_letter, DirectoryInfo[] folders, FileInfo[] files, RegistryKey key)
+        {
+            // the list that holds folder names
+            List<string> folder_names = new List<string>();
+            // get folder names
+            foreach (DirectoryInfo folder in folders)
+            {
+                if (CheckName(folder.Name, exceptions))
+                {
+                    folder_names.Add(folder.Name);
+                }
+            }
+
+            Console.WriteLine("");
+            Console.Write("Enter the password: ");
+            string input_password = InputPassword(); // password input
+            if (ComparePassword(key.GetValue("password").ToString(), input_password)) // if password is correct
+            {
+                Console.WriteLine();
+                // unlock all
+                if (Unlock_All(folder_names, files, partition_letter, exceptions))
+                {
+                    Console.WriteLine("Folders and files successfully unlocked!");
+                    Process.Start("explorer.exe", partition_letter + ":\\");
+                }
+                else
+                {
+                    Console.WriteLine("There was a problem unlocking all folders on a selected drive!");
+                }
+                Console.ReadKey();
+                ProgramStart();
+            }
+            else // if password is incorrect
+            {
+                Console.WriteLine("Wrong password");
+                PasswordVerifyAndUnlock(exceptions, partition_letter, folders, files, key);
+            }
+        }
+
         static void ShowAvailableDrives()
         {
             Console.Clear();
@@ -276,25 +310,21 @@ namespace PassProtect
             {
                 if (d.IsReady == true)
                 {
+                    DirectoryInfo drive_root = new DirectoryInfo(d.Name);
+                    DirectoryInfo[] directories = drive_root.GetDirectories();
+                    FileInfo[] files = drive_root.GetFiles();
+
                     Console.WriteLine("Drive {0}", d.Name);
                     Console.WriteLine("  Drive Type: {0}", d.DriveType);
-                    Console.WriteLine("  Drive Size: {0} GB ({1} GB free)", d.TotalSize/(1024 * 1024 * 1024), d.AvailableFreeSpace/(1024*1024*1024));
-
-                    DirectoryInfo drive_root = d.RootDirectory.Root;
-                    Console.WriteLine("  Folders: {0}", drive_root.GetDirectories().Length);
-                    Console.WriteLine("  Files: {0}", drive_root.GetFiles().Length);
+                    Console.WriteLine("  Drive Size: {0} GB ({1} GB free)", d.TotalSize / (1024 * 1024 * 1024), d.AvailableFreeSpace / (1024 * 1024 * 1024));
+                    Console.WriteLine("  Folders: {0}", directories.Length);
+                    Console.WriteLine("  Files: {0}", files.Length);
 
                     Console.WriteLine("---------------------");
                 }
             }
         }
-
-        private static void TimerShowDrives(Object o)
-        {
-            ShowAvailableDrives();
-            GC.Collect();
-        }
-        static bool Unlock_All(List<string> folder_names, string drive_letter, string[] exceptions)
+        static bool Unlock_All(List<string> folder_names, FileInfo[] files, string drive_letter, string[] exceptions)
         {
             try
             {
@@ -306,6 +336,12 @@ namespace PassProtect
                         d1.Attributes = FileAttributes.Directory | FileAttributes.Normal;
                     }
                 }
+
+                foreach(FileInfo file in files)
+                {
+                    file.Attributes = FileAttributes.Normal;
+                }
+
                 return true;
             }
             catch
