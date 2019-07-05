@@ -60,8 +60,8 @@ namespace PassProtect
             {
                 // clear start menu
                 Console.Clear();
-                Drive[] drives = DriveObjs();
-                ShowAvailableDrives(drives, true);
+                DriveHolder d_holder = new DriveHolder();
+                d_holder.ShowAvailableDrives(true);
 
                 // enter the partition letter
                 Console.Write("Please, enter the drive letter you wish to lock: ");
@@ -73,7 +73,7 @@ namespace PassProtect
                 }
 
                 // get all files from partition
-                Drive current_drive = new Drive(new DriveInfo(partition_letter + ":\\"));
+                Drive current_drive = new Drive(partition_letter);
 
                 if (current_drive.Folders.Length == 0 && current_drive.Files.Length == 0)
                 {
@@ -84,10 +84,21 @@ namespace PassProtect
                 }
                 else
                 {
-                    current_drive.Lock();
-
                     Console.WriteLine();
-                    Console.WriteLine("Drive successfully locked!");
+
+                    if (current_drive.Lock())
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Drive successfully locked!");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Error locking the drive!");
+                        Console.ResetColor();
+                    }
+                    
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
                     ProgramStart();
@@ -108,8 +119,8 @@ namespace PassProtect
             {
                 // clear start menu
                 Console.Clear();
-                Drive[] drives = DriveObjs();
-                ShowAvailableDrives(drives, false);
+                DriveHolder d_holder = new DriveHolder();
+                d_holder.ShowAvailableDrives(false);
 
                 // enter the partition letter
                 Console.Write("Please, enter the drive letter you wish to unlock: ");
@@ -120,7 +131,7 @@ namespace PassProtect
                     ProgramStart();
                 }
 
-                Drive current_drive = new Drive(new DriveInfo(partition_letter + ":\\"));
+                Drive current_drive = new Drive(partition_letter);
 
                 if (current_drive.Folders.Length == 0 && current_drive.Files.Length == 0)
                 {
@@ -149,15 +160,20 @@ namespace PassProtect
             if (pass.Validate())
             {
                 Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Password validated...");
                 // unlock all
                 if (drive.Unlock())
                 {
                     Console.WriteLine("Drive successfully unlocked!");
                     Process.Start("explorer.exe", drive.DriveObj.Name);
+                    Console.ResetColor();
                 }
                 else
                 {
-                    Console.WriteLine("There was a problem unlocking selected drive.");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error unlocking the drive.");
+                    Console.ResetColor();
                 }
                 Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
@@ -167,75 +183,6 @@ namespace PassProtect
             {
                 Console.WriteLine("Wrong password");
                 PasswordVerifyAndUnlock(drive, pass);
-            }
-        }
-
-        static Drive[] DriveObjs()
-        {
-            List<Drive> result = new List<Drive>();
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-
-            foreach (DriveInfo d in allDrives)
-            {
-                if (d.IsReady == true)
-                {
-                    result.Add(new Drive(d));
-                }
-            }
-
-            return result.ToArray();
-
-        }
-
-        static void ShowAvailableDrives(Drive[] drives, bool locking)
-        {
-            Console.Clear();
-
-            if(drives.Length > 0)
-            {
-                Console.WriteLine("Here is the list of available drives:");
-                bool at_least_one_drive = false;
-
-                foreach (Drive d in drives)
-                {
-                    if (d.DriveObj.IsReady == true)
-                    {
-                        // find .locked
-                        bool lock_found = false;
-                        for (int i = 0; i < d.Files.Length && !lock_found; i++)
-                        {
-                            if(d.Files[i].Name == ".locked")
-                            {
-                                lock_found = true;
-                            }
-                        }
-
-                        if (locking && !lock_found)
-                        {
-                            at_least_one_drive = true;
-                            // show drives that are NOT locked
-                            Console.WriteLine("Drive {0}", d.DriveObj.Name);
-                            Console.WriteLine("     Drive Type: {0}", d.DriveObj.DriveType);
-                            Console.WriteLine("     Drive Size: {0} GB ({1} GB free)", d.DriveObj.TotalSize / (1024 * 1024 * 1024), d.DriveObj.AvailableFreeSpace / (1024 * 1024 * 1024));
-                            Console.WriteLine("     Folders: {0}", d.Folders.Length);
-                            Console.WriteLine("     Files: {0}", d.Files.Length);
-                            Console.WriteLine("---------------------");
-                        }
-                        else if(!locking && lock_found)
-                        {
-                            at_least_one_drive = true;
-                            // show drives that ARE locked
-                            Console.WriteLine("Drive {0}", d.DriveObj.Name);
-                            Console.WriteLine("     This drive is locked");
-                            Console.WriteLine("---------------------");
-                        }
-                    }
-                }
-
-                if (!at_least_one_drive)
-                {
-                    Console.WriteLine("No drives found");
-                }
             }
         }
     }

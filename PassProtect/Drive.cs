@@ -28,6 +28,19 @@ namespace PassProtect
             FilterFiles();
         }
 
+        public Drive(string letter)
+        {
+            DriveInfo drive = new DriveInfo(letter + ":\\");
+            DriveObj = drive;
+            DirectoryInfo root = new DirectoryInfo(drive.Name);
+            Folders = root.GetDirectories();
+            Files = root.GetFiles();
+
+            // filter
+            FilterFolders();
+            FilterFiles();
+        }
+
         private void GenerateLock()
         {
             string secret_path = DriveObj.Name + ".locked";
@@ -43,23 +56,32 @@ namespace PassProtect
             File.Delete(DriveObj.Name + ".locked");
         }
 
-        public void Lock()
+        public bool Lock()
         {
-            // generate locked file
-            GenerateLock();
-
-            // lock
-
-            // hide all folders
-            for (int i = 0; i < Folders.Length; i++)
+            try
             {
-                Folders[i].Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                // generate locked file
+                GenerateLock();
+
+                // lock
+
+                // hide all folders
+                for (int i = 0; i < Folders.Length; i++)
+                {
+                    Folders[i].Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                }
+
+                // hide all files
+                for (int i = 0; i < Files.Length; i++)
+                {
+                    Files[i].Attributes = FileAttributes.Hidden;
+                }
+
+                return true;
             }
-
-            // hide all files
-            for (int i = 0; i < Files.Length; i++)
+            catch
             {
-                Files[i].Attributes = FileAttributes.Hidden;
+                return false;
             }
         }
 
@@ -98,21 +120,15 @@ namespace PassProtect
             {
                 DirectoryInfo folder = Folders[i];
                 bool valid = true;
+
                 // check if folder name is not empty
-                if (folder.Name.Trim() == "")
-                {
-                    valid = false;
-                }
+                valid = !IsEmpty(folder.Name);
 
                 // check if it is not part of the exceptions
                 valid = !IsException(folder.Name);
 
                 // check if it is not a system folder
-                FileAttributes atrs = folder.Attributes;
-                if (folder.Attributes == FileAttributes.System)
-                {
-                    valid = false;
-                }
+                valid = !IsSystem(folder);
 
                 if (valid)
                 {
@@ -131,21 +147,15 @@ namespace PassProtect
             {
                 FileInfo file = Files[i];
                 bool valid = true;
+
                 // check if folder name is not empty
-                if (file.Name.Trim() == "")
-                {
-                    valid = false;
-                }
+                valid = !IsEmpty(file.Name);
 
                 // check if it is not part of the exceptions
                 valid = !IsException(file.Name);
 
                 // check if it is not a system folder
-                FileAttributes atrs = file.Attributes;
-                if (file.Attributes == FileAttributes.System)
-                {
-                    valid = false;
-                }
+                valid = !IsSystem(file);
 
                 if (valid)
                 {
@@ -154,6 +164,11 @@ namespace PassProtect
             }
 
             Files = result.ToArray();
+        }
+
+        private bool IsEmpty(string name)
+        {
+            return name.Trim() == "";
         }
 
         private bool IsException(string name)
@@ -170,6 +185,16 @@ namespace PassProtect
             }
 
             return exception;
+        }
+
+        private bool IsSystem(DirectoryInfo dir)
+        {
+            return dir.Attributes.HasFlag(FileAttributes.System);
+        }
+
+        private bool IsSystem(FileInfo file)
+        {
+            return file.Attributes.HasFlag(FileAttributes.System);
         }
     }
 }
