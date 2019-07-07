@@ -54,6 +54,35 @@ namespace PassProtect
                 ProgramStart();
             }
         }
+        
+        static string DriveLetterInput()
+        {
+            Console.Write("Please, enter the drive letter you wish to lock: ");
+            ConsoleKeyInfo partition_letter = Console.ReadKey();
+
+            string keychar = partition_letter.KeyChar.ToString().Trim();
+
+            if(keychar == "")
+            {
+                ProgramStart();
+                return keychar;
+            }
+            else
+            {
+                switch (partition_letter.Key)
+                {
+                    case ConsoleKey.Backspace:
+                        ProgramStart();
+                        return "";
+                    case ConsoleKey.Escape:
+                        ProgramStart();
+                        return "";
+                    default:
+                        return partition_letter.KeyChar.ToString();
+                }
+            }
+        }
+
         static void Locking()
         {
             try
@@ -64,13 +93,7 @@ namespace PassProtect
                 d_holder.ShowAvailableDrives(true);
 
                 // enter the partition letter
-                Console.Write("Please, enter the drive letter you wish to lock: ");
-                string partition_letter = Console.ReadLine();
-
-                if (partition_letter.Trim() == "")
-                {
-                    ProgramStart();
-                }
+                string partition_letter = DriveLetterInput();
 
                 // get all files from partition
                 Drive current_drive = new Drive(partition_letter);
@@ -123,13 +146,7 @@ namespace PassProtect
                 d_holder.ShowAvailableDrives(false);
 
                 // enter the partition letter
-                Console.Write("Please, enter the drive letter you wish to unlock: ");
-                string partition_letter = Console.ReadLine();
-
-                if(partition_letter.Trim() == "")
-                {
-                    ProgramStart();
-                }
+                string partition_letter = DriveLetterInput();
 
                 Drive current_drive = new Drive(partition_letter);
 
