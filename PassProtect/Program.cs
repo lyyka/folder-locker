@@ -31,20 +31,20 @@ namespace PassProtect
             try
             {
                 // insert command and act accordingly
-                int command = Convert.ToInt32(Console.ReadLine());
-                if (command == 1)
+                int input = Convert.ToInt32(Console.ReadLine());
+                if (input == 1)
                 {
                     Locking();
                 }
-                if (command == 2)
+                if (input == 2)
                 {
                     Unlocking(pass);
                 }
-                if (command == 3)
+                if (input == 3)
                 {
                     Environment.Exit(0);
                 }
-                if (command < 1 || command > 3)
+                if (input < 1 || input > 3)
                 {
                     ProgramStart();
                 }

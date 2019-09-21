@@ -64,17 +64,24 @@ namespace PassProtect
                 GenerateLock();
 
                 // lock
+                Console.WriteLine();
 
                 // hide all folders
                 for (int i = 0; i < Folders.Length; i++)
                 {
+                    Console.WriteLine("Locking " + Folders[i].FullName);
                     Folders[i].Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                    Console.WriteLine("Locked " + Folders[i].FullName);
+                    Console.WriteLine();
                 }
 
                 // hide all files
                 for (int i = 0; i < Files.Length; i++)
                 {
+                    Console.WriteLine("Locking " + Files[i].FullName);
                     Files[i].Attributes = FileAttributes.Hidden;
+                    Console.WriteLine("Locked " + Files[i].FullName);
+                    Console.WriteLine();
                 }
 
                 return true;
